@@ -9,13 +9,14 @@ int C = 0;
 int A_switch = 0;
 int B_switch = 999;
 int u = 0;
-int u_1 = 0;
 const int A_pin = 25; // 割り込みピン
 const int B_pin = 26;
 const int Tact = 36;
 int count = 0;
 void pulse_counter();
 int old_pos = 0;
+
+int M_val = 175;
 timer t;
 
 void setup() {
@@ -31,14 +32,21 @@ void setup() {
 
 void loop() {
   int now_pos = count;
+  int change_flag = 0;
   int s = digitalRead(Tact);
   if(A_switch != 5 && s == LOW){
     A_switch = 5;
   }
-  Serial.print(" s : ");
-  Serial.print(s);
-  Serial.print(" switch : ");
-  Serial.print(A_switch);
+  if(now_pos != old_pos && 10 < t.read_ms()){
+    if(now_pos < old_pos){
+      change_flag = 1;
+      u++;
+    }
+    else{
+      change_flag = -1;
+      u--;
+    }
+  }
 
   if(A_switch == 0){
     int flag = 0;
@@ -46,31 +54,22 @@ void loop() {
       B_switch = A_switch;
       flag = 1;
     }
-    if(now_pos != old_pos && 10 < t.read_ms()){
-      if(now_pos < old_pos){
-        u++;
-      }
-      else{
-        u--;
-      }
-      u_1 = u / 2;
+
+    if(change_flag == 1){
+      int u_1 = u / 2;
       A = u_1 % num;
       if(A < 0){
         A += num;
       }
-      t.reset();
-      Serial.print(" pos : ");
-      Serial.print(A);
-      Serial.print(" u : ");
-      Serial.println(u);
     }
 
     if(A == 0){
       if(A != B || flag == 1){
         B = A;
         M5.Lcd.fillScreen(BLACK);
-        M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 1 ");
+        M5.Lcd.setCursor(80,100);
+        M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("Start");
       }
     }
 
@@ -78,8 +77,9 @@ void loop() {
       if(A != B || flag == 1){
         B = A;
         M5.Lcd.fillScreen(BLACK);
-        M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 2 ");
+        M5.Lcd.setCursor(70,100);
+        M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("setMotor");
       }
     }
 
@@ -87,8 +87,9 @@ void loop() {
       if(A != B || flag == 1){
         B = A;
         M5.Lcd.fillScreen(BLACK);
-        M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 3 ");
+        M5.Lcd.setCursor(70,100);
+        M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("checkBall");
       }
     }
 
@@ -96,8 +97,9 @@ void loop() {
       if(A != B || flag == 1){
         B = A;
         M5.Lcd.fillScreen(BLACK);
-        M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 4 ");
+        M5.Lcd.setCursor(70,100);
+        M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("checkLine");
       }
     }
 
@@ -105,8 +107,9 @@ void loop() {
       if(A != B || flag == 1){
         B = A;
         M5.Lcd.fillScreen(BLACK);
-        M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 5 ");
+        M5.Lcd.setCursor(60,100);
+        M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("setValiables");
       }
     }
     C = 0;
@@ -123,8 +126,19 @@ void loop() {
         B = A;
         M5.Lcd.fillScreen(BLACK);
         M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 10 ");
+        M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("Motor_val : ");
       }
+
+      if(change_flag == 1){
+        M_val += 5;
+      }
+      if(change_flag == -1){
+        M_val -= 5;
+      }
+      
+      M5.Lcd.setCursor(200,100);
+      M5.Lcd.printf("%d",M_val);
     }
     if(A == 1){
       if(flag == 1){
@@ -182,8 +196,8 @@ void loop() {
 
 void pulse_counter() {
   if(digitalRead(A_pin) ^ digitalRead(B_pin)) {
-    count++;
-  } else {
     count--;
+  } else {
+    count++;
   }
 }
