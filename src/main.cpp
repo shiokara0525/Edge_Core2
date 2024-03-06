@@ -1,63 +1,31 @@
-#include <M5Core2.h>
-#include<Encoder.h>
-
-#define Tact 36 //押してるとき0
+#include<M5Core2.h>
+const int A_pin = 25; // 割り込みピン
+const int B_pin = 26;
 int count = 0;
-int A = 0;
-int B = 999;
-int C = 0;
-
-Encoder encoder(26,25);
-
+void pulse_counter();
+ 
 void setup() {
+  M5.begin();
+  pinMode(A_pin, INPUT);
+  pinMode(B_pin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(A_pin), pulse_counter, CHANGE);
   Serial.begin(9600);
-  M5.begin(true,true,true,true);
-  pinMode(Tact,INPUT);
-  M5.Lcd.fillScreen(BLACK);  // 画面の塗りつぶし
-  M5.Lcd.setCursor(0, 100);     // カーソルの位置
-  M5.Lcd.setTextSize(5);
-  M5.Lcd.printf("waiting...");
+  M5.Lcd.setTextSize(3);
+  M5.Lcd.printf(" please wait... ");
   delay(1000);
 }
-
+ 
 void loop() {
-  if(digitalRead(Tact) == 0){
-    if(A <= 5){
-      A += 5;
-    }
-    else{
-      A = 0;
-    }
-    M5.Lcd.fillScreen(BLACK);  // 画面の塗りつぶし
-    delay(100);
+  M5.Lcd.fillScreen(BLACK);
+  M5.Lcd.setCursor(0,100);
+  M5.Lcd.printf(" enc : %d",count);
+  delay(1000);
+}
+ 
+void pulse_counter() {
+  if(digitalRead(A_pin) ^ digitalRead(B_pin)) {
+    count++;
+  } else {
+    count--;
   }
-
-  if(A == 0){
-    if(A != B){
-      M5.Lcd.fillScreen(BLACK);  // 画面の塗りつぶし
-      M5.Lcd.setCursor(0, 100);     // カーソルの位置
-      M5.Lcd.printf("check ball");
-      B = A;
-    }
-
-  }
-  
-  if(A == 5){
-    if(A != B){
-      M5.Lcd.fillScreen(BLACK);  // 画面の塗りつぶし
-      M5.Lcd.setCursor(0, 100);     // カーソルの位置
-      M5.Lcd.printf("check line");
-      B = A;
-    } 
-  }
-
-  if(A == 10){
-    if(A != B){
-      M5.Lcd.fillScreen(BLACK);  // 画面の塗りつぶし
-      M5.Lcd.setCursor(0, 100);     // カーソルの位置
-      M5.Lcd.printf("set Motor");
-      B = A;
-    }
-  }
-  delay(100);
 }
