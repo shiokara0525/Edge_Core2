@@ -1,7 +1,7 @@
 #include<M5Core2.h>
 #include<timer.h>
 
-#define num 5
+#define num 6
 
 int A = 0;
 int B = 999;
@@ -120,6 +120,15 @@ void loop() {
         M5.Lcd.setCursor(60,100);
         M5.Lcd.setTextSize(3);
         M5.Lcd.printf("setValiables");
+      }
+    }
+    if(A == 5){
+      if(A != B || flag == 1){
+        B = A;
+        M5.Lcd.fillScreen(BLACK);
+        M5.Lcd.setCursor(60,100);
+        M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("checkCam");
       }
     }
     C = 0;
@@ -254,6 +263,30 @@ void loop() {
       }
       M5.Lcd.setCursor(240,30+50*val_flag);
       M5.Lcd.printf("<");
+    }
+
+    if(A == 5){
+      if(flag == 1){
+        B = A;
+        M5.Lcd.fillScreen(BLACK);
+        M5.Lcd.setCursor(0,30);
+        M5.Lcd.printf("ang : ");
+        M5.Lcd.setCursor(0,80);
+        M5.Lcd.printf("size : ");
+        M5.Lcd.setCursor(0,130);
+        M5.Lcd.printf("on : ");
+        M5.Lcd.setCursor(0,180);
+        M5.Lcd.printf("senter : ");
+      }
+
+      M5.Lcd.setCursor(100,30);
+      M5.Lcd.printf("%d",ang);
+      M5.Lcd.setCursor(100,80);
+      M5.Lcd.printf("%d",far);
+      M5.Lcd.setCursor(100,130);
+      M5.Lcd.printf("%d",get_val);
+      M5.Lcd.setCursor(160,180);
+      M5.Lcd.printf("%d",get);
     }
     C = 1;
   }
