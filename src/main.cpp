@@ -217,10 +217,19 @@ void loop() {
         B = A;
         M5.Lcd.fillScreen(BLACK);
         M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 50 ");
+        M5.Lcd.printf(" set_valiables ");
       }
+      M5.Lcd.setCursor(0,30);
+
     }
     C = 1;
+  }
+
+  if(A_switch == 2){
+    if(A_switch != B_switch){
+      B_switch = A_switch;
+      M5.Lcd.fillScreen(BLACK);
+    }
   }
 
   if(A_switch == 5){
@@ -234,6 +243,10 @@ void loop() {
       }
       else{
         A_switch = 0;
+      }
+
+      if(C == 1 && A == 0){
+        A_switch = 2;
       }
     }
   }
