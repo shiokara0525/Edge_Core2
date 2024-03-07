@@ -23,6 +23,8 @@ int ang = 0;
 int get_val = 100;
 int get = 1;
 int line_flag[24];
+int avaliable[5];
+int val_flag = 0;
 timer t;
 
 void setup() {
@@ -31,8 +33,10 @@ void setup() {
   pinMode(B_pin, INPUT);
   pinMode(Tact,INPUT);
   attachInterrupt(digitalPinToInterrupt(A_pin), pulse_counter, CHANGE);
-  M5.Lcd.setTextSize(4);
+  M5.Lcd.setTextSize(3);
   Serial.begin(9600);
+  M5.Lcd.setCursor(100,100);
+  M5.Lcd.printf("waiting...");
   delay(1000);
 }
 
@@ -40,7 +44,7 @@ void loop() {
   int now_pos = count;
   int change_flag = 0;
   int s = digitalRead(Tact);
-  if(A_switch != 5 && s == LOW){
+  if(s == LOW){
     A_switch = 5;
   }
   if(now_pos != old_pos && 10 < t.read_ms()){
@@ -134,6 +138,13 @@ void loop() {
         M5.Lcd.setCursor(0,100);
         M5.Lcd.setTextSize(3);
         M5.Lcd.printf("goal_color: ");
+        M5.Lcd.setCursor(210,100);
+        if(goal_color == 0){
+          M5.Lcd.printf("Blue");
+        }
+        else{
+          M5.Lcd.printf("Yellow");
+        }
       }
 
       M5.Lcd.setCursor(210,100);
@@ -216,20 +227,70 @@ void loop() {
       if(flag == 1){
         B = A;
         M5.Lcd.fillScreen(BLACK);
-        M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" set_valiables ");
+        M5.Lcd.setCursor(0,30);
+        M5.Lcd.print("avaliable_1 :");
+        M5.Lcd.setCursor(0,80);
+        M5.Lcd.print("avaliable_2 :");
+        M5.Lcd.setCursor(0,130);
+        M5.Lcd.print("avaliable_3 :");
+        M5.Lcd.setCursor(0,180);
+        M5.Lcd.print("avaliable_4 :");
       }
-      M5.Lcd.setCursor(0,30);
 
+      if(change_flag != 0){
+        int u_1 = u / 2;
+        int u_2 = u_1 % 4;
+        if(u_2 < 0){
+          u_2 += 4;
+        }
+        val_flag = u_2;
+      }
+      
+      for(int i = 0; i < 4; i++){
+        if(val_flag != i){
+          M5.Lcd.setCursor(240,30+50*i);
+          M5.Lcd.printf("  ");
+        }
+      }
+      M5.Lcd.setCursor(240,30+50*val_flag);
+      M5.Lcd.printf("<");
     }
     C = 1;
   }
 
   if(A_switch == 2){
+    int flag = 0;
     if(A_switch != B_switch){
       B_switch = A_switch;
       M5.Lcd.fillScreen(BLACK);
+      flag = 1;
     }
+    if(A == 0){
+      if(flag == 1){
+        M5.Lcd.setCursor(0,120);
+        M5.Lcd.printf("waiting...");
+      }
+    }
+
+    if(A == 4){
+      if(flag == 1){
+        M5.Lcd.setCursor(0,100);
+        M5.Lcd.printf("avaliable_%d :",val_flag+1);
+      }
+      if(change_flag != 0){
+        if(change_flag == 1){
+          avaliable[val_flag] += 1;
+        }
+        else if(change_flag == -1){
+          avaliable[val_flag] -= 1;
+        }
+        M5.Lcd.setCursor(240,100);
+        M5.Lcd.printf("  ");
+        M5.Lcd.setCursor(240,100);
+        M5.Lcd.printf("%d",avaliable[val_flag]);
+      }
+    }
+    C = 2;
   }
 
   if(A_switch == 5){
@@ -245,7 +306,11 @@ void loop() {
         A_switch = 0;
       }
 
-      if(C == 1 && A == 0){
+      if(C == 2 && (A == 0 || A == 4)){
+        A_switch = 0;
+      }
+
+      if(C == 1 && (A == 0 || A == 4)){
         A_switch = 2;
       }
     }
