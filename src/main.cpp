@@ -18,10 +18,15 @@ int old_pos = 0;
 
 int M_val = 175;
 int goal_color = 0;
-int far = 0;
-int ang = 0;
-int get_val = 100;
-int get = 1;
+int ball_ang = 0;
+int ball_far = 0;
+int ball_get = 0;
+int ball_get_val = 0;
+int line_ang = 0;
+int cam_size = 0;
+int cam_ang = 0;
+int cam_front = 0;
+int cam_on = 0;
 int line_flag[24];
 int avaliable[5];
 int val_flag = 0;
@@ -202,13 +207,13 @@ void loop() {
       }
 
       M5.Lcd.setCursor(100,30);
-      M5.Lcd.printf("%d",ang);
+      M5.Lcd.printf("%d",ball_ang);
       M5.Lcd.setCursor(100,80);
-      M5.Lcd.printf("%d",far);
+      M5.Lcd.printf("%d",ball_far);
       M5.Lcd.setCursor(160,130);
-      M5.Lcd.printf("%d",get_val);
+      M5.Lcd.printf("%d",ball_get_val);
       M5.Lcd.setCursor(100,180);
-      M5.Lcd.printf("%d",get);
+      M5.Lcd.printf("%d",ball_get);
     }
     if(A == 3){
       if(flag == 1){
@@ -220,7 +225,7 @@ void loop() {
         M5.Lcd.printf(" on_ : ");
       }
       M5.Lcd.setCursor(100,30);
-      M5.Lcd.printf("%d",ang);
+      M5.Lcd.printf("%d",line_ang);
       M5.Lcd.setCursor(100,80);
       M5.Lcd.setTextSize(3);
       for(int i = 0; i < 12;i++){
@@ -280,13 +285,13 @@ void loop() {
       }
 
       M5.Lcd.setCursor(100,30);
-      M5.Lcd.printf("%d",ang);
+      M5.Lcd.printf("%d",cam_ang);
       M5.Lcd.setCursor(100,80);
-      M5.Lcd.printf("%d",far);
+      M5.Lcd.printf("%d",cam_size);
       M5.Lcd.setCursor(100,130);
-      M5.Lcd.printf("%d",get_val);
+      M5.Lcd.printf("%d",cam_on);
       M5.Lcd.setCursor(160,180);
-      M5.Lcd.printf("%d",get);
+      M5.Lcd.printf("%d",cam_front);
     }
     C = 1;
   }
