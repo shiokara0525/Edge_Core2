@@ -17,6 +17,12 @@ void pulse_counter();
 int old_pos = 0;
 
 int M_val = 175;
+int goal_color = 0;
+int far = 0;
+int ang = 0;
+int get_val = 100;
+int get = 1;
+int line_flag[24];
 timer t;
 
 void setup() {
@@ -127,6 +133,27 @@ void loop() {
         M5.Lcd.fillScreen(BLACK);
         M5.Lcd.setCursor(0,100);
         M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("goal_color: ");
+      }
+
+      M5.Lcd.setCursor(210,100);
+      if(change_flag != 0){
+        if(goal_color == 0){
+          goal_color = 1;
+          M5.Lcd.printf("Yellow");
+        }
+        else{
+          goal_color = 0;
+          M5.Lcd.printf("Blue  ");
+        }
+      }
+    }
+    if(A == 1){
+      if(flag == 1){
+        B = A;
+        M5.Lcd.fillScreen(BLACK);
+        M5.Lcd.setCursor(0,100);
+        M5.Lcd.setTextSize(3);
         M5.Lcd.printf("Motor_val : ");
       }
 
@@ -136,32 +163,53 @@ void loop() {
       if(change_flag == -1){
         M_val -= 5;
       }
-      
+
       M5.Lcd.setCursor(200,100);
       M5.Lcd.printf("%d",M_val);
-    }
-    if(A == 1){
-      if(flag == 1){
-        B = A;
-        M5.Lcd.fillScreen(BLACK);
-        M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 20 ");
-      }
     }
     if(A == 2){
       if(flag == 1){
         B = A;
         M5.Lcd.fillScreen(BLACK);
-        M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 30 ");
+        M5.Lcd.setCursor(0,30);
+        M5.Lcd.printf("ang : ");
+        M5.Lcd.setCursor(0,80);
+        M5.Lcd.printf("far : ");
+        M5.Lcd.setCursor(0,130);
+        M5.Lcd.printf("get_val : ");
+        M5.Lcd.setCursor(0,180);
+        M5.Lcd.printf("get : ");
       }
+
+      M5.Lcd.setCursor(100,30);
+      M5.Lcd.printf("%d",ang);
+      M5.Lcd.setCursor(100,80);
+      M5.Lcd.printf("%d",far);
+      M5.Lcd.setCursor(160,130);
+      M5.Lcd.printf("%d",get_val);
+      M5.Lcd.setCursor(100,180);
+      M5.Lcd.printf("%d",get);
     }
     if(A == 3){
       if(flag == 1){
         B = A;
         M5.Lcd.fillScreen(BLACK);
-        M5.Lcd.setCursor(0,100);
-        M5.Lcd.printf(" 40 ");
+        M5.Lcd.setCursor(0,30);
+        M5.Lcd.printf(" ang : ");
+        M5.Lcd.setCursor(0,80);
+        M5.Lcd.printf(" on_ : ");
+      }
+      M5.Lcd.setCursor(100,30);
+      M5.Lcd.printf("%d",ang);
+      M5.Lcd.setCursor(100,80);
+      M5.Lcd.setTextSize(3);
+      for(int i = 0; i < 12;i++){
+        M5.Lcd.printf("%d",line_flag[i]);
+      }
+      M5.Lcd.printf("\n");
+      M5.Lcd.setCursor(100,120);
+      for(int i = 12; i < 24;i++){
+        M5.Lcd.printf("%d",line_flag[i]);
       }
     }
     if(A == 4){
