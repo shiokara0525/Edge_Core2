@@ -2,6 +2,8 @@
 #include<timer.h>
 
 #define num 6
+#define reseive_lenth 7
+#define reseive_avaliable 4
 
 int A = 0;
 int B = 999;
@@ -329,7 +331,7 @@ void loop() {
         M5.Lcd.printf("%d",avaliable[val_flag]);
       }
       Serial2.write(38);
-      Serial2.write(1);
+      Serial2.write(0);
       for(int i = 0; i < 4; i++){
         Serial2.write(avaliable[i]);
       }
@@ -375,24 +377,24 @@ void pulse_counter() {
 
 
 void serialEvent2(){
-  uint8_t read[7];
-  if(Serial2.available() < 7){
+  uint8_t read[reseive_lenth];
+  if(Serial2.available() < reseive_lenth){
     return;
   }
   read[0] = Serial2.read();
   if(read[0] != 38){
     return;
   }
-  for(int i = 1; i < 7; i++){
+  for(int i = 1; i < reseive_lenth; i++){
     read[i] = Serial2.read();
   }
 
-  if(read[0] == 38 && read[6] == 37){
+  if(read[0] == 38 && read[reseive_lenth-1] == 37){
     if(read[1] == 0){
-      for(int i = 0; i < 4; i++){
+      for(int i = 0; i < reseive_avaliable; i++){
         avaliable[i] = read[i+2];
       }
-      for(int i = 0; i < 4; i++){
+      for(int i = 0; i < reseive_avaliable; i++){
         Serial.print(" ");
         Serial.print(avaliable[i]);
       }
