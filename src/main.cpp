@@ -4,6 +4,7 @@
 #define num 6
 #define reseive_lenth 7
 #define reseive_avaliable 4
+#define send_lenth 7
 
 int A = 0;
 int B = 999;
@@ -17,6 +18,8 @@ const int Tact = 36;
 int count = 0;
 void pulse_counter();
 int old_pos = 0;
+uint8_t send[send_lenth] = {38,0,0,0,0,0,37};
+int send_flag = 0;
 
 int M_val = 175;
 int goal_color = 0;
@@ -51,6 +54,7 @@ void setup() {
 void loop() {
   int now_pos = count;
   int change_flag = 0;
+  send_flag = 0;
   int s = digitalRead(Tact);
   if(s == LOW){
     A_switch = 5;
@@ -192,6 +196,10 @@ void loop() {
         M_val -= 5;
       }
 
+      send[1] = 1;
+      send[2] = M_val;
+      send_flag = 1;
+
       M5.Lcd.setCursor(200,100);
       M5.Lcd.printf("%d",M_val);
     }
@@ -330,12 +338,12 @@ void loop() {
         M5.Lcd.setCursor(240,100);
         M5.Lcd.printf("%d",avaliable[val_flag]);
       }
-      Serial2.write(38);
-      Serial2.write(0);
-      for(int i = 0; i < 4; i++){
-        Serial2.write(avaliable[i]);
+
+      send[1] = 0;
+      for(int i = 2; i < 6; i++){
+        send[i] = avaliable[i-2];
       }
-      Serial2.write(37);
+      send_flag = 1;
     }
     C = 2;
   }
@@ -365,6 +373,10 @@ void loop() {
 
   old_pos = now_pos;
   Serial.println();
+
+  if(send_flag == 1){
+    Serial2.write(send,send_lenth);
+  }
 }
 
 void pulse_counter() {
@@ -400,6 +412,7 @@ void serialEvent2(){
       }
     }
     if(read[1] == 1){
+      M_val = read[2];
     }
   }
   Serial.println();
