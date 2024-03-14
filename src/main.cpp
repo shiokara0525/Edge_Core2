@@ -4,6 +4,7 @@ int count = 0;
 
 void setup() {
   M5.begin();
+  Serial.begin(9600);
   Serial2.begin(9600);
 }
 
@@ -13,9 +14,12 @@ void loop() {
   M5.Lcd.setTextSize(5);  // 文字サイズを設定
 
   M5.Lcd.printf("Count: %d\n", count);  // LCDに表示
-  count++;
   delay(10);
+}
 
-  Serial2.write(count % 256);  // 38を送信
-  delay(1000);
+
+void serialEvent2(){
+  int a = Serial2.read();
+  Serial.println(a);
+  count = a;
 }
