@@ -161,10 +161,10 @@ void loop() {
         M5.Lcd.printf("goal_color: ");
         M5.Lcd.setCursor(210,100);
         if(goal_color == 0){
-          M5.Lcd.printf("Blue");
+          M5.Lcd.printf("Yellow");
         }
         else{
-          M5.Lcd.printf("Yellow");
+          M5.Lcd.printf("Blue");
         }
       }
 
@@ -179,6 +179,9 @@ void loop() {
           M5.Lcd.printf("Blue  ");
         }
       }
+      send[1] = 2;
+      send[2] = goal_color;
+      send_flag = 1;
     }
     if(A == 1){
       if(flag == 1){
@@ -413,6 +416,9 @@ void serialEvent2(){
     }
     if(read[1] == 1){
       M_val = read[2];
+    }
+    if(read[1] == 2){
+      goal_color = read[2];
     }
   }
   Serial.println();
