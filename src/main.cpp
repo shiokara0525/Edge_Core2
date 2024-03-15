@@ -1,10 +1,17 @@
 #include<M5Core2.h>
 #include<timer.h>
+#include<ball.h>
+#include<line.h>
+#include<Cam.h>
 
 #define num 6
 #define reseive_lenth 7
 #define reseive_avaliable 4
 #define send_lenth 7
+
+BALL ball;
+LINE line;
+Cam cam_front(4);
 
 int A = 0;
 int B = 999;
@@ -30,7 +37,6 @@ int ball_get_val = 0;
 int line_ang = 0;
 int cam_size = 0;
 int cam_ang = 0;
-int cam_front = 0;
 int cam_on = 0;
 int line_flag[24];
 int avaliable[5];
@@ -58,6 +64,10 @@ void loop() {
   int change_flag = 0;
   send_flag = 0;
   int s = digitalRead(Tact);
+  ball.getBallposition();
+  line.getLINE_Vec();
+  cam_front.getCamdata();
+
   if(s == LOW){
     A_switch = 5;
   }
@@ -231,13 +241,13 @@ void loop() {
       }
 
       M5.Lcd.setCursor(100,30);
-      M5.Lcd.printf("%d",ball_ang);
+      M5.Lcd.printf("%d",ball.ang);
       M5.Lcd.setCursor(100,80);
-      M5.Lcd.printf("%d",ball_far);
+      M5.Lcd.printf("%d",ball.far);
       M5.Lcd.setCursor(160,130);
-      M5.Lcd.printf("%d",ball_get_val);
+      M5.Lcd.printf("%d",ball.get_1);
       M5.Lcd.setCursor(100,180);
-      M5.Lcd.printf("%d",ball_get);
+      M5.Lcd.printf("%d",ball.get_2);
     }
     if(A == 3){
       if(flag == 1){
@@ -253,16 +263,16 @@ void loop() {
         send_flag = 1;
       }
       M5.Lcd.setCursor(100,30);
-      M5.Lcd.printf("%d",line_ang);
+      M5.Lcd.printf("%d",line.ang);
       M5.Lcd.setCursor(100,80);
       M5.Lcd.setTextSize(3);
       for(int i = 0; i < 12;i++){
-        M5.Lcd.printf("%d",line_flag[i]);
+        M5.Lcd.printf("%d",line.data_on[i]);
       }
       M5.Lcd.printf("\n");
       M5.Lcd.setCursor(100,120);
-      for(int i = 12; i < 24;i++){
-        M5.Lcd.printf("%d",line_flag[i]);
+      for(int i = 12; i < 27;i++){
+        M5.Lcd.printf("%d",line.data_on[i]);
       }
     }
     if(A == 4){
@@ -318,13 +328,13 @@ void loop() {
       }
 
       M5.Lcd.setCursor(100,30);
-      M5.Lcd.printf("%d",cam_ang);
+      M5.Lcd.printf("%d",cam_front.ang);
       M5.Lcd.setCursor(100,80);
-      M5.Lcd.printf("%d",cam_size);
+      M5.Lcd.printf("%d",cam_front.Size);
       M5.Lcd.setCursor(100,130);
-      M5.Lcd.printf("%d",cam_on);
+      M5.Lcd.printf("%d",cam_front.on);
       M5.Lcd.setCursor(160,180);
-      M5.Lcd.printf("%d",cam_front);
+      M5.Lcd.printf("%d",cam_front.senter);
     }
     C = 1;
   }
@@ -339,7 +349,7 @@ void loop() {
     if(A == 0){
       if(flag == 1){
         M5.Lcd.setCursor(0,60);
-        M5.Lcd.printf("goal_color : %s",goal_color == 0 ? "Yellow" : "Blue");
+        M5.Lcd.printf("goal_color : %s",goal_color == 0 ? "Y" : "B");
         M5.Lcd.setCursor(0,100);
         M5.Lcd.printf("Motor_val : %d",M_val);
         M5.Lcd.setCursor(0,140);
@@ -490,6 +500,24 @@ void serialEvent2(){
     }
     if(read[1] == 2){
       goal_color = read[2];
+    }
+    if(read[1] == 4){
+      ball.x_pos = read[2];
+      ball.y_pos = read[3];
+      ball.get_1 = read[4];
+      ball.get_2 = read[5];
+    }
+    if(read[1] == 5){
+      line.data_byte[0] = read[2];
+      line.data_byte[1] = read[3];
+      line.data_byte[2] = read[4];
+      line.data_byte[3] = read[5];
+    }
+    if(read[1] == 6){
+      cam_front.data_byte[0] = read[2];
+      cam_front.data_byte[1] = read[3];
+      cam_front.data_byte[2] = read[4];
+      cam_front.data_byte[3] = read[5];
     }
   }
   Serial.println();
