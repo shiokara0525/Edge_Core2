@@ -4,7 +4,7 @@
 #include<line.h>
 #include<Cam.h>
 
-#define num 6
+#define num 8
 #define reseive_lenth 7
 #define reseive_avaliable 4
 #define send_lenth 7
@@ -94,7 +94,7 @@ void loop() {
     }
 
     if(change_flag == 1){
-      int u_1 = u / 2;
+      int u_1 = u;
       A = u_1 % num;
       if(A < 0){
         A += num;
@@ -157,6 +157,24 @@ void loop() {
         M5.Lcd.setCursor(60,100);
         M5.Lcd.setTextSize(3);
         M5.Lcd.printf("checkCam");
+      }
+    }
+    if(A == 6){
+      if(A != B || flag == 1){
+        B = A;
+        M5.Lcd.fillScreen(BLACK);
+        M5.Lcd.setCursor(60,100);
+        M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("Test");
+      }
+    }
+    if(A == 7){
+      if(A != B || flag == 1){
+        B = A;
+        M5.Lcd.fillScreen(BLACK);
+        M5.Lcd.setCursor(60,100);
+        M5.Lcd.setTextSize(3);
+        M5.Lcd.printf("enterData");
       }
     }
     C = 0;
@@ -324,7 +342,7 @@ void loop() {
         send[1] = 6;
         send[2] = 0;
         send_flag = 1;
-        
+
       }
 
       M5.Lcd.setCursor(100,30);
@@ -335,6 +353,12 @@ void loop() {
       M5.Lcd.printf("%d",cam_front.on);
       M5.Lcd.setCursor(160,180);
       M5.Lcd.printf("%d",cam_front.senter);
+    }
+
+    if(A == 6){
+      if(flag == 1){
+        B = A;
+      }
     }
     C = 1;
   }
