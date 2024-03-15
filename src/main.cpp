@@ -77,11 +77,10 @@ void loop() {
     if(A_switch != B_switch){
       B_switch = A_switch;
       flag = 1;
-      if(enter_flag == 1){
-        send[1] = 3;
-        send[2] = 0;
-        send_flag = 1;
-      }
+
+      send[1] = 3;
+      send[2] = 0;
+      send_flag = 1;
     }
 
     if(change_flag == 1){
@@ -225,11 +224,10 @@ void loop() {
         M5.Lcd.printf("get_val : ");
         M5.Lcd.setCursor(0,180);
         M5.Lcd.printf("get : ");
-        if(enter_flag == 1){
-          send[1] = 4;
-          send[2] = 0;
-          send_flag = 1;
-        }
+
+        send[1] = 4;
+        send[2] = 0;
+        send_flag = 1;
       }
 
       M5.Lcd.setCursor(100,30);
@@ -249,11 +247,10 @@ void loop() {
         M5.Lcd.printf(" ang : ");
         M5.Lcd.setCursor(0,80);
         M5.Lcd.printf(" on_ : ");
-        if(enter_flag == 1){
-          send[1] = 5;
-          send[2] = 0;
-          send_flag = 1;
-        }
+
+        send[1] = 5;
+        send[2] = 0;
+        send_flag = 1;
       }
       M5.Lcd.setCursor(100,30);
       M5.Lcd.printf("%d",line_ang);
@@ -313,11 +310,11 @@ void loop() {
         M5.Lcd.printf("on : ");
         M5.Lcd.setCursor(0,180);
         M5.Lcd.printf("senter : ");
-        if(enter_flag == 1){
-          send[1] = 6;
-          send[2] = 0;
-          send_flag = 1;
-        }
+
+        send[1] = 6;
+        send[2] = 0;
+        send_flag = 1;
+        
       }
 
       M5.Lcd.setCursor(100,30);
