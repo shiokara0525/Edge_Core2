@@ -77,6 +77,11 @@ void loop() {
     if(A_switch != B_switch){
       B_switch = A_switch;
       flag = 1;
+      if(enter_flag == 1){
+        send[1] = 3;
+        send[2] = 0;
+        send_flag = 1;
+      }
     }
 
     if(change_flag == 1){
@@ -327,12 +332,11 @@ void loop() {
         M5.Lcd.printf("Motor_val : %d",M_val);
         M5.Lcd.setCursor(0,140);
         M5.Lcd.printf("AC_dir : %d",robot_dir);
-      }
-
-      if(enter_flag == 1){
-        send[1] = 3;
-        send[2] = 1;
-        send_flag = 1;
+        if(enter_flag == 1){
+          send[1] = 3;
+          send[2] = 1;
+          send_flag = 1;
+        }
       }
     }
 
@@ -363,6 +367,29 @@ void loop() {
     C = 2;
   }
 
+
+  if(A_switch == 3){
+    int flag = 0;
+    if(A_switch != B_switch){
+      B_switch = A_switch;
+      flag = 1;
+      M5.Lcd.fillScreen(BLACK);
+    }
+    if(A == 0){
+      if(flag == 1){
+        M5.Lcd.setCursor(0,20);
+        M5.Lcd.printf("running...");
+        if(enter_flag == 1){
+          send[1] = 3;
+          send[2] = 2;
+          send_flag = 1;
+        }
+      }
+    }
+    C = 3;
+  }
+
+
   enter_flag = 0;
 
   if(A_switch == 5){
@@ -386,7 +413,17 @@ void loop() {
         A_switch = 2;
       }
 
+      if(C == 1 & A == 0){
+        enter_flag = 1;
+      }
+
       if(C == 2 && A == 0){
+        enter_flag = 1;
+        A_switch = 3;
+      }
+
+      if(C == 3 && A == 0){
+        A_switch = 0;
         enter_flag = 1;
       }
     }
