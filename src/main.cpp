@@ -35,6 +35,8 @@ int cam_on = 0;
 int line_flag[24];
 int avaliable[5];
 int val_flag = 0;
+int robot_dir = 0;
+int enter_flag = 0;
 timer t;
 
 void setup() {
@@ -319,8 +321,18 @@ void loop() {
     }
     if(A == 0){
       if(flag == 1){
-        M5.Lcd.setCursor(0,120);
-        M5.Lcd.printf("waiting...");
+        M5.Lcd.setCursor(0,60);
+        M5.Lcd.printf("goal_color : %s",goal_color == 0 ? "Yellow" : "Blue");
+        M5.Lcd.setCursor(0,100);
+        M5.Lcd.printf("Motor_val : %d",M_val);
+        M5.Lcd.setCursor(0,140);
+        M5.Lcd.printf("AC_dir : %d",robot_dir);
+      }
+
+      if(enter_flag == 1){
+        send[1] = 3;
+        send[2] = 1;
+        send_flag = 1;
       }
     }
 
@@ -351,6 +363,8 @@ void loop() {
     C = 2;
   }
 
+  enter_flag = 0;
+
   if(A_switch == 5){
     if(A_switch != B_switch){
       B_switch = A_switch;
@@ -370,6 +384,10 @@ void loop() {
 
       if(C == 1 && (A == 0 || A == 4)){
         A_switch = 2;
+      }
+
+      if(C == 2 && A == 0){
+        enter_flag = 1;
       }
     }
   }
